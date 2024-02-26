@@ -96,3 +96,73 @@ END;
 /
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE PROCEDURE add_friend(
+    p_userID IN NUMBER,
+    p_friendID IN NUMBER
+) AS
+BEGIN
+    INSERT INTO Friends(UserID, FriendID)
+    VALUES (p_userID, p_friendID);
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
+END add_friend;
+
+
+CREATE OR REPLACE PROCEDURE add_like(
+    p_userID IN NUMBER,
+    p_postID IN NUMBER
+) AS
+BEGIN
+    INSERT INTO Likes(UserID, PostID)
+    VALUES (p_userID, p_postID);
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
+END add_like;
+
+
+
+CREATE OR REPLACE PROCEDURE remove_like(
+    p_userID IN NUMBER,
+    p_postID IN NUMBER
+) AS
+BEGIN
+    DELETE FROM Likes
+    WHERE UserID = p_userID AND PostID = p_postID;
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+      ROLLBACK;
+      RAISE;
+END remove_like;

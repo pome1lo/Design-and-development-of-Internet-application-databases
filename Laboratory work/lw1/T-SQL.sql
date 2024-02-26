@@ -104,3 +104,41 @@ END;
 GO
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE add_friend
+    @p_userID INT,
+    @p_friendID INT
+AS
+BEGIN
+    INSERT INTO Friends(UserID, FriendID)
+    VALUES (@p_userID, @p_friendID);
+END;
+
+CREATE PROCEDURE add_like
+    @p_userID INT,
+    @p_postID INT
+AS
+BEGIN
+    INSERT INTO Likes(UserID, PostID)
+    VALUES (@p_userID, @p_postID);
+END;
+
+CREATE PROCEDURE remove_like
+    @p_userID INT,
+    @p_postID INT
+AS
+BEGIN
+    DELETE FROM Likes
+    WHERE UserID = @p_userID AND PostID = @p_postID;
+END;
