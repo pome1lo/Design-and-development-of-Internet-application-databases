@@ -1,18 +1,23 @@
 SELECT
-  TO_CHAR(RegistrationDate, 'YYYY') AS Year,
-  TO_CHAR(RegistrationDate, 'Q') AS Quarter,
-  TO_CHAR(RegistrationDate, 'MM') AS Month,
-  COUNT(*) AS MonthlyRegistrations,
-  COUNT(*) OVER (PARTITION BY TO_CHAR(RegistrationDate, 'YYYY'), TO_CHAR(RegistrationDate, 'Q')) AS QuarterlyRegistrations,
-  COUNT(*) OVER (PARTITION BY TO_CHAR(RegistrationDate, 'YYYY'), CEIL(TO_CHAR(RegistrationDate, 'MM') / 6)) AS SemiAnnualRegistrations,
-  COUNT(*) OVER (PARTITION BY TO_CHAR(RegistrationDate, 'YYYY')) AS AnnualRegistrations
-FROM Users
-WHERE IsActive = 1
+  EXTRACT(YEAR FROM RegistrationDate) AS номер_года,
+  TO_CHAR(RegistrationDate, 'Q') AS номер_квартала,
+  EXTRACT(MONTH FROM RegistrationDate) AS всего_за_месяц,
+  (SELECT COUNT(*) FROM Users u2 WHERE EXTRACT(YEAR FROM u2.RegistrationDate) = EXTRACT(YEAR FROM u1.RegistrationDate) AND EXTRACT(MONTH FROM u2.RegistrationDate) = EXTRACT(MONTH FROM u1.RegistrationDate)) AS месяц,
+  (SELECT COUNT(*) FROM Users u2 WHERE EXTRACT(YEAR FROM u2.RegistrationDate) = EXTRACT(YEAR FROM u1.RegistrationDate) AND TO_CHAR(u2.RegistrationDate, 'Q') = TO_CHAR(u1.RegistrationDate, 'Q')) AS квартал,
+  (SELECT COUNT(*) FROM Users u2 WHERE EXTRACT(YEAR FROM u2.RegistrationDate) = EXTRACT(YEAR FROM u1.RegistrationDate) AND TRUNC(EXTRACT(MONTH FROM u2.RegistrationDate)/6) = TRUNC(EXTRACT(MONTH FROM u1.RegistrationDate)/6)) AS пол_года,
+  (SELECT COUNT(*) FROM Users u2 WHERE EXTRACT(YEAR FROM u2.RegistrationDate) = EXTRACT(YEAR FROM u1.RegistrationDate)) AS год
+FROM Users u1
 GROUP BY
-  TO_CHAR(RegistrationDate, 'YYYY'),
+  EXTRACT(YEAR FROM RegistrationDate),
   TO_CHAR(RegistrationDate, 'Q'),
-  TO_CHAR(RegistrationDate, 'MM')
+  EXTRACT(MONTH FROM RegistrationDate)
 ORDER BY
-  Year,
-  Quarter,
-  Month;
+  номер_года,
+  номер_квартала,
+  всего_за_месяц;
+
+
+
+
+
+SELECT * FROM USERS;

@@ -41,6 +41,12 @@ CREATE TABLE Comments (
 
 
 
+delete from comments;
+delete from Likes;
+delete from Friends;
+delete from Posts;
+delete from Users;
+
 
 CREATE SEQUENCE seq_users;
 CREATE TRIGGER trg_users
