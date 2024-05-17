@@ -27,7 +27,7 @@ CREATE TABLE lob_user.my_table (
 );
 
 
-CREATE DIRECTORY dir4 AS 'C:\test';
+CREATE DIRECTORY MYDIR AS 'C:\test';
 
 -- 6.
 
@@ -36,7 +36,7 @@ DECLARE
   dest_blob BLOB;
 BEGIN
   INSERT INTO lob_user.my_table (id, foto, doc)
-  VALUES (1, empty_blob(), BFILENAME('dir4', 'document.docx'))
+  VALUES (1, empty_blob(), BFILENAME('MYDIR', 'document.docx'))
   RETURNING foto, doc INTO dest_blob, src_bfile;
 
   DBMS_LOB.fileopen(src_bfile, DBMS_LOB.file_readonly);
@@ -46,4 +46,4 @@ BEGIN
 END;
 /
 
-
+SELECT * FROM lob_user.my_table;
